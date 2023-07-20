@@ -1,4 +1,4 @@
-public abstract class FormatacaoDecorator implements Produto{
+public abstract class FormatacaoDecorator{
     Produto produto;
 
     public FormatacaoDecorator(Produto produto) {
