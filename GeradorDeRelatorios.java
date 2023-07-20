@@ -29,9 +29,8 @@ public class GeradorDeRelatorios {
 	private String argFiltro;
 	private int format_flags;
 	private List<String> formats;
-	private Comparator<Produto> comparator;
 
-	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro, int format_flags, Comparator<Produto> comparator){
+	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro, int format_flags){
 
 		this.produtos = new ArrayList<>(produtos);
 		
@@ -45,7 +44,6 @@ public class GeradorDeRelatorios {
 		this.format_flags = format_flags;
 		this.filtro = filtro;
 		this.argFiltro = argFiltro;
-		this.comparator = comparator;
 	}
 
 
@@ -195,72 +193,62 @@ public class GeradorDeRelatorios {
 		PrintWriter out = new PrintWriter(arquivoSaida);
 
 		out.println("<!DOCTYPE html><html>");
-		out.println("<head><title>Relatorio de produtos</title></head>");
-		out.println("<body>");
-		out.println("Relatorio de Produtos:");
-		out.println("<ul>");
+        out.println("<head><title>Relatorio de produtos</title></head>");
+        out.println("<body>");
+        out.println("Relatorio de Produtos:");
+        out.println("<ul>");
 
-		int count = 0;
+        int count = 0;
 
-		for(int i = 0; i < produtos.size(); i++){
+        for (Produto p : produtos) {
+            boolean selecionado = false;
 
-			Produto p = produtos[i];
-			boolean selecionado = false;
+            if (filtro.equals(FILTRO_TODOS)) {
+                selecionado = true;
+            } else if (filtro.equals(FILTRO_ESTOQUE_MENOR_OU_IQUAL_A)) {
+                if (p.getQtdEstoque() <= Integer.parseInt(argFiltro)) {
+                    selecionado = true;
+                }
+            } else if (filtro.equals(FILTRO_CATEGORIA_IGUAL_A)) {
+                if (p.getCategoria().equalsIgnoreCase(argFiltro)) {
+                    selecionado = true;
+                }
+            } else {
+                throw new RuntimeException("Filtro invalido!");
+            }
 
-			if(filtro.equals(FILTRO_TODOS)){
+            if (selecionado) {
+                out.print("<li>");
 
-				selecionado = true;
-			}
-			else if(filtro.equals(FILTRO_ESTOQUE_MENOR_OU_IQUAL_A)){
+                if ((format_flags & FORMATO_ITALICO) > 0) {
+                    out.print("<span style=\"font-style:italic\">");
+                }
 
-				if(p.getQtdEstoque() <= Integer.parseInt(argFiltro)) selecionado = true;	
-			}
-			else if(filtro.equals(FILTRO_CATEGORIA_IGUAL_A)){
+                if ((format_flags & FORMATO_NEGRITO) > 0) {
+                    out.print("<span style=\"font-weight:bold\">");
+                }
 
-				if(p.getCategoria().equalsIgnoreCase(argFiltro)) selecionado = true;
-			}
-			else{
-				throw new RuntimeException("Filtro invalido!");			
-			}
+                out.print(p.formataParaImpressao());
 
-			if(selecionado){
+                if ((format_flags & FORMATO_NEGRITO) > 0) {
+                    out.print("</span>");
+                }
 
-				out.print("<li>");
+                if ((format_flags & FORMATO_ITALICO) > 0) {
+                    out.print("</span>");
+                }
 
-				if((format_flags & FORMATO_ITALICO) > 0){
+                out.println("</li>");
+                count++;
+            }
+        }
 
-					out.print("<span style=\"font-style:italic\">");
-				}
-
-				if((format_flags & FORMATO_NEGRITO) > 0){
-
-					out.print("<span style=\"font-weight:bold\">");
-				} 
+        out.println("</ul>");
+        out.println(count + " produtos listados, de um total de " + produtos.size() + ".");
+        out.println("</body>");
+        out.println("</html>");
+    }
 			
-				out.print(p.formataParaImpressao());
-
-				if((format_flags & FORMATO_NEGRITO) > 0){
-
-					out.print("</span>");
-				} 
-
-				if((format_flags & FORMATO_ITALICO) > 0){
-
-					out.print("</span>");
-				}
-
-				out.println("</li>");
-				count++;
-			}
-		}
-
-		out.println("</ul>");
-		out.println(count + " produtos listados, de um total de " + produtos.size() + ".");
-		out.println("</body>");
-		out.println("</html>");
-
-		out.close();
-	}
 
 	public static List<Produto> carregaProdutos(){
 
