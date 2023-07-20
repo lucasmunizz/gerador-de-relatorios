@@ -29,8 +29,9 @@ public class GeradorDeRelatorios {
 	private String argFiltro;
 	private int format_flags;
 	private List<String> formats;
+	private Comparator<Produto> comparator;
 
-	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro, int format_flags){
+	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro, int format_flags, Comparator<Produto> comparator){
 
 		this.produtos = new ArrayList<>(produtos);
 		
@@ -44,7 +45,19 @@ public class GeradorDeRelatorios {
 		this.format_flags = format_flags;
 		this.filtro = filtro;
 		this.argFiltro = argFiltro;
+		this.comparator = comparator;
 	}
+
+
+	public void ordena() {
+        if ("quick".equals(algoritmo)) {
+            SortStrategy sort = new QuickSort();
+        } else if ("insertion".equals(algoritmo)) {
+           SortStrategy sort = new QuickSort();
+        } else {
+            throw new IllegalArgumentException("Algoritmo de ordenacao invalido!");
+        }
+    }
 
 	// private int particiona(int ini, int fim){
 
@@ -177,7 +190,7 @@ public class GeradorDeRelatorios {
 
 		debug();
 
-		//ordena(0, produtos.size() - 1);
+		ordena();
 
 		PrintWriter out = new PrintWriter(arquivoSaida);
 
