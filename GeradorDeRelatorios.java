@@ -32,13 +32,6 @@ public class GeradorDeRelatorios {
 	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, FiltroStrategy filtro, String argFiltro, int format_flags){
 
 		this.produtos = new ArrayList<>(produtos);
-		
-		// for (Produto p: produtos){
-			
-		// 	this.produtos.add(p);
-		// }
-
-
 		this.algoritmo = getSortStrategy(algoritmo, criterio);
 		this.criterio = criterio;
 		this.format_flags = format_flags;
