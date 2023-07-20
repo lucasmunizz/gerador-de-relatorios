@@ -23,159 +23,47 @@ public class GeradorDeRelatorios {
 	public static final int FORMATO_ITALICO = 0b0010;
 
 	private List<Produto> produtos;
-	private String algoritmo;
+	private SortStrategy algoritmo;
 	private String criterio;
-	private String filtro;
+	private FiltroStrategy filtro;
 	private String argFiltro;
 	private int format_flags;
-	private List<String> formats;
 
-	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro, int format_flags){
+	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, FiltroStrategy filtro, String argFiltro, int format_flags){
 
 		this.produtos = new ArrayList<>(produtos);
 		
-		for (Produto p: produtos){
+		// for (Produto p: produtos){
 			
-			this.produtos.add(p);
-		}
+		// 	this.produtos.add(p);
+		// }
 
-		this.algoritmo = algoritmo;
+
+		this.algoritmo = getSortStrategy(algoritmo, criterio);
 		this.criterio = criterio;
 		this.format_flags = format_flags;
 		this.filtro = filtro;
 		this.argFiltro = argFiltro;
 	}
 
-
-	public void ordena() {
-        if ("quick".equals(algoritmo)) {
-            SortStrategy sort = new QuickSort();
-        } else if ("insertion".equals(algoritmo)) {
-           SortStrategy sort = new QuickSort();
-        } else {
-            throw new IllegalArgumentException("Algoritmo de ordenacao invalido!");
+	private SortStrategy getSortStrategy(String algoritmo, String criterio) {
+        SortStrategy strategy;
+        switch (algoritmo) {
+            case "quick":
+                strategy = new QuickSort();
+                break;
+            case "insertion":
+                strategy = new InsertionSort();
+                break;
+            default:
+                throw new IllegalArgumentException("Algoritmo de ordenação inválido: " + algoritmo);
         }
+        return strategy;
     }
 
-	// private int particiona(int ini, int fim){
-
-	// 	Produto x = produtos[ini];
-	// 	int i = (ini - 1);
-	// 	int j = (fim + 1);
-
-	// 	while(true){
-
-	// 		if(criterio.equals(CRIT_DESC_CRESC)){
-
-	// 			do{ 
-	// 				j--;
-
-	// 			} while(produtos[j].getDescricao().compareToIgnoreCase(x.getDescricao()) > 0);
-			
-	// 			do{
-	// 				i++;
-
-	// 			} while(produtos[i].getDescricao().compareToIgnoreCase(x.getDescricao()) < 0);
-	// 		}
-	// 		else if(criterio.equals(CRIT_PRECO_CRESC)){
-
-	// 			do{ 
-	// 				j--;
-
-	// 			} while(produtos[j].getPreco() > x.getPreco());
-			
-	// 			do{
-	// 				i++;
-
-	// 			} while(produtos[i].getPreco() < x.getPreco());
-	// 		}
-
-	// 		else if(criterio.equals(CRIT_ESTOQUE_CRESC)){
-
-	// 			do{ 
-	// 				j--;
-
-	// 			} while(produtos[j].getQtdEstoque() > x.getQtdEstoque());
-			
-	// 			do{
-	// 				i++;
-
-	// 			} while(produtos[i].getQtdEstoque() < x.getQtdEstoque());
-
-	// 		}
-	// 		else{
-
-	// 			throw new RuntimeException("Criterio invalido!");
-	// 		}
-
-	// 		if(i < j){
-	// 			Produto temp = produtos[i];
-	// 			produtos[i] = produtos[j]; 				
-	// 			produtos[j] = temp;
-	// 		}
-	// 		else return j;
-	// 	}
-	// }
-
-	// private void ordena(int ini, int fim){
-
-	// 	if(algoritmo.equals(ALG_INSERTIONSORT)){
-
-	// 		for(int i = ini; i <= fim; i++){
-
-	// 			Produto x = produtos[i];				
-	// 			int j = (i - 1);
-
-	// 			while(j >= ini){
-
-	// 				if(criterio.equals(CRIT_DESC_CRESC)){
-
-	// 					if( x.getDescricao().compareToIgnoreCase(produtos[j].getDescricao()) < 0 ){
-			
-	// 						produtos[j + 1] = produtos[j];
-	// 						j--;
-	// 					}
-	// 					else break;
-	// 				}
-	// 				else if(criterio.equals(CRIT_PRECO_CRESC)){
-
-	// 					if(x.getPreco() < produtos[j].getPreco()){
-			
-	// 						produtos[j + 1] = produtos[j];
-	// 						j--;
-	// 					}
-	// 					else break;
-	// 				}
-	// 				else if(criterio.equals(CRIT_ESTOQUE_CRESC)){
-
-	// 					if(x.getQtdEstoque() < produtos[j].getQtdEstoque()){
-			
-	// 						produtos[j + 1] = produtos[j];
-	// 						j--;
-	// 					}
-	// 					else break;
-	// 				}
-	// 				else throw new RuntimeException("Criterio invalido!");
-	// 			}
-
-	// 			produtos[j + 1] = x;
-	// 		}
-	// 	}
-	// 	else if(algoritmo.equals(ALG_QUICKSORT)){
-
-	// 		if(ini < fim) {
-
-	// 			int q = particiona(ini, fim);
-				
-	// 			ordena(ini, q);
-	// 			ordena(q + 1, fim);
-	// 		}
-	// 	}
-	// 	else {
-	// 		throw new RuntimeException("Algoritmo invalido!");
-	// 	}
-	// }
-	
+	private List<Produto> filtra(){
+		return filtro.filtra(produtos, argFiltro);
+	}
 	
 	public void debug(){
 
@@ -188,7 +76,7 @@ public class GeradorDeRelatorios {
 
 		debug();
 
-		ordena();
+		algoritmo.ordena(produtos, criterio);
 
 		PrintWriter out = new PrintWriter(arquivoSaida);
 
@@ -199,54 +87,39 @@ public class GeradorDeRelatorios {
         out.println("<ul>");
 
         int count = 0;
+		List<Produto> produtosFiltrados = filtra();
 
-        for (Produto p : produtos) {
-            boolean selecionado = false;
+		for (Produto p : produtosFiltrados) {
+            out.print("<li>");
 
-            if (filtro.equals(FILTRO_TODOS)) {
-                selecionado = true;
-            } else if (filtro.equals(FILTRO_ESTOQUE_MENOR_OU_IQUAL_A)) {
-                if (p.getQtdEstoque() <= Integer.parseInt(argFiltro)) {
-                    selecionado = true;
-                }
-            } else if (filtro.equals(FILTRO_CATEGORIA_IGUAL_A)) {
-                if (p.getCategoria().equalsIgnoreCase(argFiltro)) {
-                    selecionado = true;
-                }
-            } else {
-                throw new RuntimeException("Filtro invalido!");
+            if ((format_flags & FORMATO_ITALICO) > 0) {
+                out.print("<span style=\"font-style:italic\">");
             }
 
-            if (selecionado) {
-                out.print("<li>");
-
-                if ((format_flags & FORMATO_ITALICO) > 0) {
-                    out.print("<span style=\"font-style:italic\">");
-                }
-
-                if ((format_flags & FORMATO_NEGRITO) > 0) {
-                    out.print("<span style=\"font-weight:bold\">");
-                }
-
-                out.print(p.formataParaImpressao());
-
-                if ((format_flags & FORMATO_NEGRITO) > 0) {
-                    out.print("</span>");
-                }
-
-                if ((format_flags & FORMATO_ITALICO) > 0) {
-                    out.print("</span>");
-                }
-
-                out.println("</li>");
-                count++;
+            if ((format_flags & FORMATO_NEGRITO) > 0) {
+                out.print("<span style=\"font-weight:bold\">");
             }
+
+            out.print(p.formataParaImpressao());
+
+            if ((format_flags & FORMATO_NEGRITO) > 0) {
+                out.print("</span>");
+            }
+
+            if ((format_flags & FORMATO_ITALICO) > 0) {
+                out.print("</span>");
+            }
+
+            out.println("</li>");
+            count++;
         }
 
         out.println("</ul>");
         out.println(count + " produtos listados, de um total de " + produtos.size() + ".");
         out.println("</body>");
         out.println("</html>");
+
+        out.close();
     }
 			
 
@@ -320,13 +193,26 @@ public class GeradorDeRelatorios {
 			String op = opcoes_formatacao[i];
 			formato |= (op != null ? op.equals("negrito") ? FORMATO_NEGRITO : (op.equals("italico") ? FORMATO_ITALICO : 0) : 0); 
 		}
+        FiltroStrategy filtro;
+        if (opcao_criterio_filtro.equalsIgnoreCase("todos")) {
+            filtro = new FiltragemTodos();
+        } else if (opcao_criterio_filtro.equalsIgnoreCase("estoque_menor_igual")) {
+            filtro = new FiltragemEstoqueMenorIgual();
+        } else if (opcao_criterio_filtro.equalsIgnoreCase("categoria_igual")) {
+            filtro = new FiltragemCategoriaIgual();
+        } else {
+            System.out.println("Critério de filtragem inválido.");
+            System.exit(1);
+            return;
+        }
+
 		
 		GeradorDeRelatorios gdr = new GeradorDeRelatorios(	carregaProdutos(), 
 									opcao_algoritmo,
 									opcao_criterio_ord,
-									opcao_criterio_filtro,
+									filtro,
 									opcao_parametro_filtro,
-									formato 
+									formato
 								 );
 
 		try{
