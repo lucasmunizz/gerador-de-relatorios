@@ -73,6 +73,16 @@ public class GeradorDeRelatorios {
 
 		PrintWriter out = new PrintWriter(arquivoSaida);
 
+		Formatacao formatacao = new FormatacaoPadrao();
+
+    	if ((format_flags & FORMATO_ITALICO) > 0) {
+        formatacao = new FormatacaoItalica();
+    	}
+
+    	if ((format_flags & FORMATO_NEGRITO) > 0) {
+    	    formatacao = new FormatacaoNegrito();
+    	}
+
 		out.println("<!DOCTYPE html><html>");
         out.println("<head><title>Relatorio de produtos</title></head>");
         out.println("<body>");
@@ -85,24 +95,9 @@ public class GeradorDeRelatorios {
 		for (Produto p : produtosFiltrados) {
             out.print("<li>");
 
-            if ((format_flags & FORMATO_ITALICO) > 0) {
-                out.print("<span style=\"font-style:italic\">");
-            }
-
-            if ((format_flags & FORMATO_NEGRITO) > 0) {
-                out.print("<span style=\"font-weight:bold\">");
-            }
-
-            out.print(p.formataParaImpressao());
-
-            if ((format_flags & FORMATO_NEGRITO) > 0) {
-                out.print("</span>");
-            }
-
-            if ((format_flags & FORMATO_ITALICO) > 0) {
-                out.print("</span>");
-            }
-
+			Produto produtoFormatado = new ProdutoFormatado(p, formatacao);
+            out.print(produtoFormatado.formataParaImpressao());
+			
             out.println("</li>");
             count++;
         }
