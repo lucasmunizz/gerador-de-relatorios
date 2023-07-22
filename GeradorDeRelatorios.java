@@ -68,6 +68,7 @@ public class GeradorDeRelatorios {
 	public void geraRelatorio(String arquivoSaida) throws IOException {
 
 		debug();
+		System.out.println(FORMATO_NEGRITO);
 
 		algoritmo.ordena(produtos, criterio);
 
@@ -75,13 +76,16 @@ public class GeradorDeRelatorios {
 
 		Formatacao formatacao = new FormatacaoPadrao();
 
-    	if ((format_flags & FORMATO_ITALICO) > 0) {
+    	if ((FORMATO_ITALICO) > 0) {
         formatacao = new FormatacaoItalica();
     	}
 
-    	if ((format_flags & FORMATO_NEGRITO) > 0) {
+    	if ((FORMATO_NEGRITO) > 0) {
+			System.out.println("aqui");
     	    formatacao = new FormatacaoNegrito();
     	}
+
+		
 
 		out.println("<!DOCTYPE html><html>");
         out.println("<head><title>Relatorio de produtos</title></head>");
@@ -97,7 +101,7 @@ public class GeradorDeRelatorios {
 
 			Produto produtoFormatado = new ProdutoFormatado(p, formatacao);
             out.print(produtoFormatado.formataParaImpressao());
-			
+
             out.println("</li>");
             count++;
         }
@@ -170,7 +174,7 @@ public class GeradorDeRelatorios {
 		String opcao_criterio_ord = args[1];
 		String opcao_criterio_filtro = args[2];
 		String opcao_parametro_filtro = args[3];
-		
+		System.out.println(opcao_parametro_filtro);
 		String [] opcoes_formatacao = new String[2];
 		opcoes_formatacao[0] = args.length > 4 ? args[4] : null;
 		opcoes_formatacao[1] = args.length > 5 ? args[5] : null;
@@ -181,6 +185,8 @@ public class GeradorDeRelatorios {
 			String op = opcoes_formatacao[i];
 			formato |= (op != null ? op.equals("negrito") ? FORMATO_NEGRITO : (op.equals("italico") ? FORMATO_ITALICO : 0) : 0); 
 		}
+
+		System.out.println(formato);
         FiltroStrategy filtro;
         if (opcao_criterio_filtro.equalsIgnoreCase("todos")) {
             filtro = new FiltragemTodos();
