@@ -82,7 +82,6 @@ public class GeradorDeRelatorios {
     	}
 
     	if (format_flags == 1) {
-			System.out.println("aqui");
     	    formatacao = new FormatacaoNegrito();
     	}
 
@@ -195,7 +194,12 @@ public class GeradorDeRelatorios {
             filtro = new CriterioEstoqueMenorOuIgual();
         } else if (opcao_criterio_filtro.equalsIgnoreCase("categoria_igual")) {
             filtro = new FiltragemCategoriaIgual();
-        } else {
+        } else if (opcao_criterio_filtro.equalsIgnoreCase("preco_intervalo")) {
+            filtro = new FiltragemPrecoIntervalo();
+		} else if (opcao_criterio_filtro.equalsIgnoreCase("substring")) {
+            filtro = new FiltragemSubstring();
+        }
+		else {
             System.out.println("Critério de filtragem inválido.");
             System.exit(1);
             return;
