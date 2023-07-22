@@ -192,7 +192,7 @@ public class GeradorDeRelatorios {
         if (opcao_criterio_filtro.equalsIgnoreCase("todos")) {
             filtro = new FiltragemTodos();
         } else if (opcao_criterio_filtro.equalsIgnoreCase("estoque_menor_igual")) {
-            filtro = new FiltragemEstoqueMenorIgual();
+            filtro = new CriterioEstoqueMenorOuIgual();
         } else if (opcao_criterio_filtro.equalsIgnoreCase("categoria_igual")) {
             filtro = new FiltragemCategoriaIgual();
         } else {

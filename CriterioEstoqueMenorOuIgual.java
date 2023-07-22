@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class FiltragemEstoqueMenorIgual implements FiltroStrategy {
+public class CriterioEstoqueMenorOuIgual implements FiltroStrategy {
     @Override
-    public List<Produto> filtra(List<Produto> produtos, String argumento) {
-        int limite = Integer.parseInt(argumento);
+    public List<Produto> filtra(List<Produto> produtos, String argFiltro) {
+        int limite = Integer.parseInt(argFiltro);
         List<Produto> produtosFiltrados = new ArrayList<>();
         for (Produto p : produtos) {
             if (p.getQtdEstoque() <= limite) {

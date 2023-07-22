@@ -1,5 +1,5 @@
 import java.util.List;
 
 public interface FiltroStrategy {
-    List<Produto> filtra(List<Produto> produtos, String argumento);
+    List<Produto> filtra(List<Produto> produtos, String parametro);
 }
