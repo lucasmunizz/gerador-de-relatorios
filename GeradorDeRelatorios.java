@@ -37,6 +37,7 @@ public class GeradorDeRelatorios {
 		this.format_flags = format_flags;
 		this.filtro = filtro;
 		this.argFiltro = argFiltro;
+		System.out.println(format_flags);
 	}
 
 	private SortStrategy getSortStrategy(String algoritmo, String criterio) {
@@ -76,11 +77,11 @@ public class GeradorDeRelatorios {
 
 		Formatacao formatacao = new FormatacaoPadrao();
 
-    	if ((FORMATO_ITALICO) > 0) {
+    	if (format_flags == 2) {
         formatacao = new FormatacaoItalica();
     	}
 
-    	if ((FORMATO_NEGRITO) > 0) {
+    	if (format_flags == 1) {
 			System.out.println("aqui");
     	    formatacao = new FormatacaoNegrito();
     	}
