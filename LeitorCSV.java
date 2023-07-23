@@ -40,6 +40,19 @@ public class LeitorCSV {
 
         }
 
+        public static List<Produto> carregaProdutosCSV(){
+            List<Produto> produtos = new ArrayList<>();
+            try {
+                produtos = LeitorCSV.lerProdutosDoCSV("produtos.csv");
+            } catch (IOException e) {
+                System.out.println("Erro ao ler o arquivo CSV: " + e.getMessage());
+                System.exit(1);
+            }
+        
+            return produtos;
+    
+        }
+
     }
 
 
