@@ -16,14 +16,12 @@ public class GeradorDeRelatorios {
 	private String criterio;
 	private FiltroStrategy filtro;
 	private String argFiltro;
-	private int format_flags;
 
-	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro, int format_flags){
+	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro){
 
 		this.produtos = new ArrayList<>(produtos);
 		this.algoritmo = Ordenador.getSortStrategy(algoritmo, criterio);
 		this.criterio = criterio;
-		this.format_flags = format_flags;
 		this.filtro = Filtrador.getFiltroStrategy(filtro);
 		this.argFiltro = argFiltro;
 	}
@@ -93,20 +91,12 @@ public class GeradorDeRelatorios {
 		String [] opcoes_formatacao = new String[2];
 		opcoes_formatacao[0] = args.length > 4 ? args[4] : null;
 		opcoes_formatacao[1] = args.length > 5 ? args[5] : null;
-		int formato = FORMATO_PADRAO;
-		
-		for(int i = 0; i < opcoes_formatacao.length; i++) {
-
-			String op = opcoes_formatacao[i];
-			formato |= (op != null ? op.equals("negrito") ? FORMATO_NEGRITO : (op.equals("italico") ? FORMATO_ITALICO : 0) : 0); 
-		}
-		
+	
 		GeradorDeRelatorios gdr = new GeradorDeRelatorios(	LeitorCSV.carregaProdutosCSV(), 
 									opcao_algoritmo,
 									opcao_criterio_ord,
 									opcao_criterio_filtro,
-									opcao_parametro_filtro,
-									formato
+									opcao_parametro_filtro
 								 );
 
 		try{
