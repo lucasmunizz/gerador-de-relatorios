@@ -73,13 +73,11 @@ public class GeradorDeRelatorios {
 		if(args.length < 4){
 
 			System.out.println("Uso:");
-			System.out.println("\tjava " + GeradorDeRelatorios.class.getName() + " <algoritmo> <critério de ordenação> <critério de filtragem> <parâmetro de filtragem> <opções de formatação>");
+			System.out.println("\tjava " + GeradorDeRelatorios.class.getName() + " <algoritmo> <critério de ordenação> <critério de filtragem> <parâmetro de filtragem>");
 			System.out.println("Onde:");
 			System.out.println("\talgoritmo: 'quick' ou 'insertion'");
 			System.out.println("\tcriterio de ordenação: 'preco_c' ou 'descricao_c' ou 'estoque_c'");
-			System.out.println("\tcriterio de filtragem: 'todos' ou 'estoque_menor_igual' ou 'categoria_igual'"); 
-			System.out.println("\tparâmetro de filtragem: argumentos adicionais necessários para a filtragem"); 
-			System.out.println("\topções de formatação: 'negrito' e/ou 'italico'");
+			System.out.println("\tcriterio de filtragem: 'todos' ou 'estoque_menor_igual' ou 'categoria_igual' ou 'preco_intervalo' ou 'substring' "); 
 			System.out.println();
 			System.exit(1);
 		}
