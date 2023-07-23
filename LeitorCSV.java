@@ -33,8 +33,17 @@ public class LeitorCSV {
 
                 Produto produto = new ProdutoPadrao(id, descricao, categoria, quantidadeEstoque, preco);
 
-                Produto formatado = new ProdutoFormatadoCSV(produto, negrito, italico, cor);
-                produtos.add(formatado);
+                if (italico){
+                    produto = new ProdutoItalico(produto);
+                }
+
+                if (negrito){
+                    produto = new ProdutoNegrito(produto);
+                }
+                
+                produto = new ProdutoCor(produto, cor);
+
+                produtos.add(produto);
             }
          return produtos;
 

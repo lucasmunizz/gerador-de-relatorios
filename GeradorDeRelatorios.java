@@ -55,7 +55,7 @@ public class GeradorDeRelatorios {
 		for (Produto p : produtosFiltrados) {
             out.print("<li>");
 
-			Produto produtoFormatado = (ProdutoFormatadoCSV) p;
+			Produto produtoFormatado = (ProdutoCor) p;
             out.print(produtoFormatado.formataParaImpressao());
 
             out.println("</li>");
