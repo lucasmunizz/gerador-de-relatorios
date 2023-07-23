@@ -1,4 +1,4 @@
-public class ProdutoFormatadoTeste implements Produto {
+public class ProdutoFormatadoCSV implements Produto {
     private Produto produto;
     private Formatacao formatacao;
     private int id;
@@ -10,7 +10,7 @@ public class ProdutoFormatadoTeste implements Produto {
     private boolean italico;
     private String cor;
 
-    public ProdutoFormatadoTeste(int id, String descricao, String categoria, int qtdEstoque, double preco,
+    public ProdutoFormatadoCSV(int id, String descricao, String categoria, int qtdEstoque, double preco,
                             boolean negrito, boolean italico, String cor) {
         setId(id);
         setDescricao(descricao);
@@ -23,7 +23,7 @@ public class ProdutoFormatadoTeste implements Produto {
         System.out.println(preco);
      }
 
-     public ProdutoFormatadoTeste(Produto produto, boolean negrito, boolean italico, String cor){
+     public ProdutoFormatadoCSV(Produto produto, boolean negrito, boolean italico, String cor){
         this.produto = produto;
         this.negrito = negrito;
         this.italico = italico;
