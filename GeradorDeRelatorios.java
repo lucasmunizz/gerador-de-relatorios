@@ -29,15 +29,40 @@ public class GeradorDeRelatorios {
 	private String argFiltro;
 	private int format_flags;
 
-	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, FiltroStrategy filtro, String argFiltro, int format_flags){
+	public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro, String argFiltro, int format_flags){
 
 		this.produtos = new ArrayList<>(produtos);
 		this.algoritmo = getSortStrategy(algoritmo, criterio);
 		this.criterio = criterio;
 		this.format_flags = format_flags;
-		this.filtro = filtro;
+		this.filtro = getFiltroStrategy(filtro);
 		this.argFiltro = argFiltro;
-		System.out.println(format_flags);
+	}
+
+
+	private FiltroStrategy getFiltroStrategy(String filtro){
+		FiltroStrategy strategy;
+		switch (filtro){
+			case "todos":
+				strategy = new FiltragemTodos();
+				break;
+			case "estoque_menor_igual":
+				strategy = new CriterioEstoqueMenorOuIgual();
+				break;
+			case "categoria_igual":
+				strategy = new FiltragemCategoriaIgual();
+				break;
+			case "preco_intervalo":
+				strategy = new FiltragemPrecoIntervalo();
+				break;
+			case "substring":
+				strategy = new FiltragemSubstring();
+				break;
+			default:
+				throw new IllegalArgumentException("Filtro de ordenação inválido: " + filtro);
+		}
+
+		return strategy;
 	}
 
 	private SortStrategy getSortStrategy(String algoritmo, String criterio) {
@@ -69,23 +94,10 @@ public class GeradorDeRelatorios {
 	public void geraRelatorio(String arquivoSaida) throws IOException {
 
 		debug();
-		System.out.println(FORMATO_NEGRITO);
 
 		algoritmo.ordena(produtos, criterio);
 
 		PrintWriter out = new PrintWriter(arquivoSaida);
-
-		// Formatacao formatacao = new FormatacaoPadrao();
-
-    	// if (format_flags == 2) {
-        // formatacao = new FormatacaoItalica();
-    	// }
-
-    	// if (format_flags == 1) {
-    	//     formatacao = new FormatacaoNegrito();
-    	// }
-
-		
 
 		out.println("<!DOCTYPE html><html>");
         out.println("<head><title>Relatorio de produtos</title></head>");
@@ -188,7 +200,6 @@ public class GeradorDeRelatorios {
 		String opcao_criterio_ord = args[1];
 		String opcao_criterio_filtro = args[2];
 		String opcao_parametro_filtro = args[3];
-		System.out.println(opcao_parametro_filtro);
 		String [] opcoes_formatacao = new String[2];
 		opcoes_formatacao[0] = args.length > 4 ? args[4] : null;
 		opcoes_formatacao[1] = args.length > 5 ? args[5] : null;
@@ -199,31 +210,11 @@ public class GeradorDeRelatorios {
 			String op = opcoes_formatacao[i];
 			formato |= (op != null ? op.equals("negrito") ? FORMATO_NEGRITO : (op.equals("italico") ? FORMATO_ITALICO : 0) : 0); 
 		}
-
-		System.out.println(formato);
-        FiltroStrategy filtro;
-        if (opcao_criterio_filtro.equalsIgnoreCase("todos")) {
-            filtro = new FiltragemTodos();
-        } else if (opcao_criterio_filtro.equalsIgnoreCase("estoque_menor_igual")) {
-            filtro = new CriterioEstoqueMenorOuIgual();
-        } else if (opcao_criterio_filtro.equalsIgnoreCase("categoria_igual")) {
-            filtro = new FiltragemCategoriaIgual();
-        } else if (opcao_criterio_filtro.equalsIgnoreCase("preco_intervalo")) {
-            filtro = new FiltragemPrecoIntervalo();
-		} else if (opcao_criterio_filtro.equalsIgnoreCase("substring")) {
-            filtro = new FiltragemSubstring();
-        }
-		else {
-            System.out.println("Critério de filtragem inválido.");
-            System.exit(1);
-            return;
-        }
-
 		
 		GeradorDeRelatorios gdr = new GeradorDeRelatorios(	carregaProdutosCSV(), 
 									opcao_algoritmo,
 									opcao_criterio_ord,
-									filtro,
+									opcao_criterio_filtro,
 									opcao_parametro_filtro,
 									formato
 								 );
