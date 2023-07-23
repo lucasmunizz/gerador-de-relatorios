@@ -75,15 +75,15 @@ public class GeradorDeRelatorios {
 
 		PrintWriter out = new PrintWriter(arquivoSaida);
 
-		Formatacao formatacao = new FormatacaoPadrao();
+		// Formatacao formatacao = new FormatacaoPadrao();
 
-    	if (format_flags == 2) {
-        formatacao = new FormatacaoItalica();
-    	}
+    	// if (format_flags == 2) {
+        // formatacao = new FormatacaoItalica();
+    	// }
 
-    	if (format_flags == 1) {
-    	    formatacao = new FormatacaoNegrito();
-    	}
+    	// if (format_flags == 1) {
+    	//     formatacao = new FormatacaoNegrito();
+    	// }
 
 		
 
@@ -99,7 +99,7 @@ public class GeradorDeRelatorios {
 		for (Produto p : produtosFiltrados) {
             out.print("<li>");
 
-			Produto produtoFormatado = new ProdutoFormatado(p, formatacao);
+			Produto produtoFormatado = (ProdutoFormatadoTeste) p;
             out.print(produtoFormatado.formataParaImpressao());
 
             out.println("</li>");
@@ -113,6 +113,20 @@ public class GeradorDeRelatorios {
 
         out.close();
     }
+
+	public static List<Produto> carregaProdutosCSV(){
+		List<Produto> produtos = new ArrayList<>();
+		try {
+			produtos = LeitorCSV.lerProdutosDoCSV("produtos.csv");
+		} catch (IOException e) {
+			System.out.println("Erro ao ler o arquivo CSV: " + e.getMessage());
+			System.exit(1);
+		}
+	
+		return produtos;
+
+
+	}
 			
 
 	public static List<Produto> carregaProdutos(){
@@ -206,7 +220,7 @@ public class GeradorDeRelatorios {
         }
 
 		
-		GeradorDeRelatorios gdr = new GeradorDeRelatorios(	carregaProdutos(), 
+		GeradorDeRelatorios gdr = new GeradorDeRelatorios(	carregaProdutosCSV(), 
 									opcao_algoritmo,
 									opcao_criterio_ord,
 									filtro,
