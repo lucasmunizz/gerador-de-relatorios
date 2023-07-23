@@ -79,10 +79,6 @@ public class GeradorDeRelatorios {
         }
         return strategy;
     }
-
-	private List<Produto> filtra(){
-		return filtro.filtra(produtos, argFiltro);
-	}
 	
 	public void debug(){
 
@@ -106,7 +102,7 @@ public class GeradorDeRelatorios {
         out.println("<ul>");
 
         int count = 0;
-		List<Produto> produtosFiltrados = filtra();
+		List<Produto> produtosFiltrados = filtro.filtra(produtos, argFiltro);
 
 		for (Produto p : produtosFiltrados) {
             out.print("<li>");
