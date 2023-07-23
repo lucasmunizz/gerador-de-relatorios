@@ -1,8 +1,8 @@
 public class ProdutoFormatado implements Produto {
     private Produto produto;
-    private Formatacao formatacao;
+    private FormatacaoDecorator formatacao;
 
-    public ProdutoFormatado(Produto produto, Formatacao formatacao) {
+    public ProdutoFormatado(Produto produto, FormatacaoDecorator formatacao) {
         this.produto = produto;
         this.formatacao = formatacao;
     }

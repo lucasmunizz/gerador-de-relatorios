@@ -7,7 +7,7 @@ public class Filtrador {
 				strategy = new FiltragemTodos();
 				break;
 			case "estoque_menor_igual":
-				strategy = new CriterioEstoqueMenorOuIgual();
+				strategy = new FiltragemMenorOuIgual();
 				break;
 			case "categoria_igual":
 				strategy = new FiltragemCategoriaIgual();

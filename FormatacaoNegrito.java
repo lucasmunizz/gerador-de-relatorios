@@ -1,4 +1,4 @@
-public class FormatacaoNegrito implements Formatacao {
+public class FormatacaoNegrito implements FormatacaoDecorator {
 
     @Override
     public String aplicarFormatacao(String texto) {

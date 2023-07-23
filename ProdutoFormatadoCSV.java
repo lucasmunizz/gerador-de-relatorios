@@ -1,6 +1,6 @@
 public class ProdutoFormatadoCSV implements Produto {
     private Produto produto;
-    private Formatacao formatacao;
+    private FormatacaoDecorator formatacao;
     private int id;
     private String descricao;
     private String categoria;

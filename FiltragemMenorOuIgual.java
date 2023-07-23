@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class CriterioEstoqueMenorOuIgual implements FiltroStrategy {
+public class FiltragemMenorOuIgual implements FiltroStrategy {
     @Override
     public List<Produto> filtra(List<Produto> produtos, String argFiltro) {
         int limite = Integer.parseInt(argFiltro);

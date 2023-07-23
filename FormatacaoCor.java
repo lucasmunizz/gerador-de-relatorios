@@ -1,4 +1,4 @@
-public class FormatacaoCor implements Formatacao {
+public class FormatacaoCor implements FormatacaoDecorator {
 
     private String cor;
 
