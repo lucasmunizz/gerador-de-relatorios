@@ -1,50 +1,25 @@
-public class ProdutoFormatado implements Produto {
-    private Produto produto;
-    private FormatacaoDecorator formatacao;
 
-    public ProdutoFormatado(Produto produto, FormatacaoDecorator formatacao) {
-        this.produto = produto;
-        this.formatacao = formatacao;
+public class ProdutoFormatado extends ProdutoDecorator {
+    private String cor;
+
+    public ProdutoFormatado(Produto produtoDecorado, String cor) {
+        super(produtoDecorado);
+        this.cor = cor;
     }
 
     @Override
     public String formataParaImpressao() {
-        String textoFormatado = formatacao.aplicarFormatacao(produto.formataParaImpressao());
-        return textoFormatado;
+        // Aplicar formatação de cor ao produtoDecorado e retornar o texto formatado
+        return "<span><font color='" + cor + "'>" + produtoDecorado.formataParaImpressao() + "</font></span>";
     }
 
     @Override
     public void setQtdEstoque(int qtdEstoque) {
-        produto.setQtdEstoque(qtdEstoque);
+        super.produtoDecorado.setQtdEstoque(qtdEstoque);
     }
 
     @Override
     public void setPreco(double preco) {
-        produto.setPreco(preco);
-    }
-
-    @Override
-    public int getId() {
-        return produto.getId();
-    }
-
-    @Override
-    public String getDescricao() {
-        return produto.getDescricao();
-    }
-
-    @Override
-    public String getCategoria() {
-        return produto.getCategoria();
-    }
-
-    @Override
-    public int getQtdEstoque() {
-        return produto.getQtdEstoque();
-    }
-
-    @Override
-    public double getPreco() {
-        return produto.getPreco();
+        super.produtoDecorado.setPreco(preco);
     }
 }

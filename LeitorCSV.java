@@ -40,8 +40,8 @@ public class LeitorCSV {
                 if (negrito){
                     produto = new ProdutoNegrito(produto);
                 }
-                
-                produto = new ProdutoCor(produto, cor);
+
+                produto = new ProdutoFormatado(produto, cor);
 
                 produtos.add(produto);
             }
