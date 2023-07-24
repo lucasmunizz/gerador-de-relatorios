@@ -28,7 +28,7 @@ public class GeradorDeRelatorios {
 
 	public void debug(){
 
-		System.out.println("Gerando relatório para array contendo " + produtos.size() + " produto(s)");
+		System.out.println("Gerando relatório para lista contendo " + produtos.size() + " produto(s)");
 		System.out.println("parametro filtro = '" + argFiltro + "'"); 
 	}
 
